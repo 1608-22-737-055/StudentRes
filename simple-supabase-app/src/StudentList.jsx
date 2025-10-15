@@ -1,8 +1,11 @@
 const StudentList = ({ students, onEdit, onDelete }) => (
-  <table>
+  <table className="table">
     <thead>
       <tr>
-        <th>Name</th><th>Roll</th><th>Marks</th><th>Actions</th>
+        <th>Name</th>
+        <th>Roll</th>
+        <th>Marks</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -11,13 +14,24 @@ const StudentList = ({ students, onEdit, onDelete }) => (
           <td>{student.name}</td>
           <td>{student.roll}</td>
           <td>{student.marks}</td>
-          <td>
-            <button onClick={() => onEdit(student)}>Edit</button>
-            <button onClick={() => onDelete(student.id)}>Delete</button>
+          <td className="actions">
+            <button 
+              onClick={() => onEdit(student)} 
+              className="button edit-button"
+            >
+              Edit
+            </button>
+            <button 
+              onClick={() => onDelete(student.id)} 
+              className="button delete-button"
+            >
+              Delete
+            </button>
           </td>
         </tr>
       ))}
     </tbody>
   </table>
 );
+
 export default StudentList;

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import supabase from "../supabaseClient";
 import StudentForm from "./StudentForm";
 import StudentList from "./StudentList";
+import "./styles.css";  // Import the CSS
 
 function App() {
   console.log('Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
@@ -19,12 +20,11 @@ function App() {
   useEffect(() => { fetchStudents(); }, []);
 
   const addStudent = async student => {
-    // Convert marks to number and remove any id field
-    const newStudent = {
-      name: student.name,
-      roll: student.roll,
-      marks: Number(student.marks) // Ensure marks is a number
-    };
+    // Remove id for new students
+    const { id, ...newStudent } = student;
+    
+    // Ensure marks is a number
+    newStudent.marks = Number(newStudent.marks);
 
     const { error } = await supabase
       .from("students")
@@ -44,16 +44,13 @@ function App() {
       return;
     }
 
-    const updatedStudent = {
-      name: student.name,
-      roll: student.roll,
-      marks: Number(student.marks)
-    };
+    const { id, ...updatedStudent } = student;
+    updatedStudent.marks = Number(updatedStudent.marks);
 
     const { error } = await supabase
       .from("students")
       .update(updatedStudent)
-      .eq("id", student.id);
+      .eq("id", id);  // Use the id we extracted
 
     if (error) {
       console.error("Update error:", error);
@@ -71,8 +68,8 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Student List</h1>
+    <div className="container">
+      <h1 className="title">Student Management System</h1>
       <StudentForm onSubmit={editing ? updateStudent : addStudent} initialData={editing} />
       <StudentList students={students} onEdit={setEditing} onDelete={deleteStudent} />
     </div>
