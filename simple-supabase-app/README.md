@@ -97,6 +97,71 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 4. Push to the branch
 5. Create a new Pull Request
 
-## License
 
-MIT License
+## Implementation Details
+
+### Core Components
+
+#### 1. Supabase Client (`supabaseClient.js`)
+- Initializes Supabase connection using environment variables
+- Handles authentication and database connections
+- Creates reusable client instance for the application
+
+#### 2. Main Application (`App.jsx`)
+- Manages application state and data flow
+- Implements CRUD operations:
+  - Fetches student list
+  - Adds new students
+  - Updates existing records
+  - Deletes student entries
+- Handles component communication and state updates
+
+#### 3. Form Handler (`StudentForm.jsx`)
+- Manages form state and validation
+- Handles both create and update operations
+- Implements dynamic form reset
+- Provides user feedback for actions
+
+#### 4. Data Display (`StudentList.jsx`)
+- Renders student data in tabular format
+- Implements action buttons for edit/delete
+- Manages user interactions with data
+
+## Supabase Configuration
+
+### Database Setup
+1. Create new Supabase project
+2. Create `students` table:
+```sql
+create table students (
+  id bigint primary key generated always as identity,
+  name text not null,
+  roll text not null,
+  marks integer not null
+);
+```
+
+### Security Settings
+1. Enable Row Level Security (RLS)
+2. Add public access policy:
+```sql
+CREATE POLICY "Enable anonymous access"
+ON "public"."students"
+FOR ALL 
+TO anon
+USING (true)
+WITH CHECK (true);
+```
+
+### Environment Configuration
+Required variables in `.env.local`:
+```
+VITE_SUPABASE_URL=your-project-url
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+## Deployment Notes
+- Never commit `.env.local`
+- Set up environment variables in deployment platform
+- Enable RLS in production
+- Use proper security policies
